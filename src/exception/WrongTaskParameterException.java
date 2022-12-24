@@ -1,7 +1,7 @@
 package exception;
 
 public class WrongTaskParameterException extends Exception{
-    String parameter;
+   private final String parameter;
 
     public WrongTaskParameterException(String parameter) {
         this.parameter = parameter;

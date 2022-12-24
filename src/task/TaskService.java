@@ -1,5 +1,7 @@
 package task;
 
+import exception.TaskNotFoundException;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -36,5 +38,10 @@ public class TaskService {
             } while (nextDT.toLocalDate().isBefore(day));
         }
         return tasksByDay;
+    }
+    public static void deleteById(int id) throws TaskNotFoundException {
+        if (TASKS.remove(id) == null) {
+            throw new TaskNotFoundException(id);
+        }
     }
 }
