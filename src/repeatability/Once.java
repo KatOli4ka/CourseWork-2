@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
 public class Once implements Repeatability {
 
     @Override
-    public LocalDateTime nextT(LocalDateTime currentDT) {
+    public LocalDateTime nextTime(LocalDateTime currentDateTime) {
         return null;
     }
 

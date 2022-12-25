@@ -15,7 +15,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Main {
-    private static final Pattern DATE_TIME_PETTERN=Pattern.compile("\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}\\:\\d{2}");
+    private static final Pattern DATE_TIME_PETTERN=Pattern.compile("\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}:\\d{2}");
     private static final Pattern DATE_PETTERN=Pattern.compile("\\d{2}\\.\\d{2}\\.\\d{4}");
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -30,26 +30,24 @@ public class Main {
                     case 1:
                         addTask(scanner);
                         break;
-                        case 2:
-                            deleteTask(scanner);
-                            break;
-                        case 3:
-                            printTasksByDay(scanner);
-                            break;
-                        case 0:
-                            break label;
-                    }
-                } else {
-                    scanner.next();
-                    System.out.println("Выберите пункт меню из списка!");
+                    case 2:
+                        deleteTask(scanner);
+                        break;
+                    case 3:
+                        printTasksByDay(scanner);
+                        break;
+                    case 0:
+                        break label;
                 }
+            } else {
+                scanner.next();
+                System.out.println("Выберите пункт меню из списка!");
             }
-
+        }
     }
-
     private static void printTasksByDay(Scanner scanner) {
         do {
-            System.out.println("Введите дату в формате \"25.12.2022\": ");
+            System.out.println("Введите дату в формате \""+ LocalDate.now().format(Constant.DATE_FORMATTER)+"\";");
             if (scanner.hasNext(DATE_PETTERN)) {
                    LocalDate day= checkDate(scanner.next(DATE_PETTERN));
                 if (day == null) {
@@ -66,9 +64,9 @@ public class Main {
                     }
                 }
                 break;
-                } else {
-                    scanner.next();
-                }
+            } else {
+                scanner.next();
+            }
         } while (true);
     }
 
@@ -79,6 +77,7 @@ public class Main {
                 if (scanner.hasNextInt()) {
                     int id= scanner.nextInt();
                     TaskService.deleteById(id);
+                    System.out.println("Задача с id - "+id+" удалена!");
                     break;
                 } else {
                     scanner.next();
@@ -128,13 +127,12 @@ public class Main {
                 scanner.next();
             }
         } while (true);
-
         return type;
     }
     private static LocalDateTime inputDT(Scanner scanner) {
         LocalDateTime dateTime;
         do {
-            System.out.println("Введите дату и время задачи в формате \"25.12.2022 12:00\": ");
+            System.out.println("Введите дату и время задачи в формате \""+LocalDateTime.now().format(Constant.DATE_TIME_FORMATTER)+"\": ");
             if (scanner.hasNext(DATE_TIME_PETTERN)) {
                dateTime=checkDateTime(scanner.next(DATE_TIME_PETTERN));
                 if (dateTime==null) {
@@ -147,7 +145,7 @@ public class Main {
             }
         } while (true);
 
-        return null;
+        return dateTime;
     }
 
     private static LocalDateTime checkDateTime(String dateTime) {

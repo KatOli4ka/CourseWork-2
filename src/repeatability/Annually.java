@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public class Annually implements Repeatability{
     @Override
-    public LocalDateTime nextT(LocalDateTime currentDT) {
-        return currentDT.plusYears(1);
+    public LocalDateTime nextTime(LocalDateTime currentDateTime) {
+        return currentDateTime.plusYears(1);
     }
 
     @Override

@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public class Daily implements Repeatability{
     @Override
-    public LocalDateTime nextT(LocalDateTime currentDT) {
-        return currentDT.plusDays(1);
+    public LocalDateTime nextTime(LocalDateTime currentDateTime) {
+        return currentDateTime.plusDays(1);
     }
 
     @Override

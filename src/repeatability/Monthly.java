@@ -4,8 +4,8 @@ import java.time.LocalDateTime;
 
 public class Monthly implements Repeatability{
     @Override
-    public LocalDateTime nextT(LocalDateTime currentDT) {
-        return currentDT.plusMonths(1);
+    public LocalDateTime nextTime(LocalDateTime currentDateTime) {
+        return currentDateTime.plusMonths(1);
     }
 
     @Override

@@ -59,7 +59,7 @@ public class Task {
 
     public void setType(Type type) {
         if (type == null){
-            type=type.PERSONAL;
+            type=Type.PERSONAL;
         }
         this.type = type;
     }
@@ -75,12 +75,12 @@ public class Task {
         this.dateTime = dateTime;
     }
     public Repeatability getRepeatability() {
-        if (repeatability == null){
-            repeatability=new Once();
-        }
         return repeatability;
     }
     public void setRepeatability(Repeatability repeatability) {
+        if (repeatability == null){
+            repeatability=new Once();
+        }
         this.repeatability = repeatability;
     }
 

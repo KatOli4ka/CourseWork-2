@@ -23,19 +23,22 @@ public class TaskService {
         Collection<Task> tasksByDay=new ArrayList<>();
         Collection<Task> allTasks=TASKS.values();
         for (Task task : allTasks) {
-            LocalDateTime currentDT=task.getDateTime();
-            LocalDateTime nextDT = task.getRepeatability().nextT(currentDT);
-            if (nextDT == null || currentDT.equals(day)) {
+            LocalDateTime currentDateTime=task.getDateTime();
+            if (currentDateTime.toLocalDate().equals(day)) {
                 tasksByDay.add(task);
                 continue;
             }
+            LocalDateTime nextDateTime=currentDateTime;
             do {
-                if (nextDT.toLocalDate().equals(day)) {
+                nextDateTime=task.getRepeatability().nextTime(nextDateTime);
+                if (nextDateTime==null) {
+                    break;
+                }
+                if (nextDateTime.toLocalDate().equals(day)) {
                     tasksByDay.add(task);
                     break;
                 }
-                nextDT = task.getRepeatability().nextT(currentDT);
-            } while (nextDT.toLocalDate().isBefore(day));
+            } while (nextDateTime.toLocalDate().isBefore(day));
         }
         return tasksByDay;
     }
