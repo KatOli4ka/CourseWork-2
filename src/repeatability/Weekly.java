@@ -7,4 +7,9 @@ public class Weekly implements Repeatability{
     public LocalDateTime nextT(LocalDateTime currentDT) {
         return currentDT.plusWeeks(1);
     }
+
+    @Override
+    public String toString() {
+        return "еженедельная";
+    }
 }

@@ -7,4 +7,9 @@ public class Monthly implements Repeatability{
     public LocalDateTime nextT(LocalDateTime currentDT) {
         return currentDT.plusMonths(1);
     }
+
+    @Override
+    public String toString() {
+        return "ежемесячная";
+    }
 }

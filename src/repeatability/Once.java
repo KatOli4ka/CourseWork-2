@@ -10,4 +10,9 @@ public class Once implements Repeatability {
     public LocalDateTime nextT(LocalDateTime currentDT) {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "единоразовая";
+    }
 }

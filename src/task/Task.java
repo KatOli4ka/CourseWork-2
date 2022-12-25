@@ -1,5 +1,6 @@
 package task;
 
+import constants.Constant;
 import exception.WrongTaskParameterException;
 import repeatability.Once;
 import repeatability.Repeatability;
@@ -10,16 +11,16 @@ public class Task {
     private static int idCount=1;
     private final int id;
     private String title;
-    private String descriptionTask;
+    private String description;
     private Type type;
     private LocalDateTime dateTime;
     private Repeatability repeatability;
 
-    public Task(String title, String descriptionTask, Type type, LocalDateTime dateTime,
+    public Task(String title, String description, Type type, LocalDateTime dateTime,
                 Repeatability repeatability) throws WrongTaskParameterException {
         id=idCount++;
         setTitle(title);
-        setDescriptionTask(descriptionTask);
+        setDescription(description);
         setType(type);
         setDateTime(dateTime);
         setRepeatability(repeatability);
@@ -41,15 +42,15 @@ public class Task {
         this.title = title;
     }
 
-    public String getDescriptionTask() {
-        return descriptionTask;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescriptionTask(String descriptionTask) throws WrongTaskParameterException {
-        if (descriptionTask == null || descriptionTask.isEmpty()) {
+    public void setDescription(String description) throws WrongTaskParameterException {
+        if (description == null || description.isEmpty()) {
             throw new WrongTaskParameterException("описание задачи");
         }
-        this.descriptionTask = descriptionTask;
+        this.description = description;
     }
 
     public Type getType() {
@@ -73,15 +74,25 @@ public class Task {
         }
         this.dateTime = dateTime;
     }
-
     public Repeatability getRepeatability() {
         if (repeatability == null){
             repeatability=new Once();
         }
         return repeatability;
     }
-
     public void setRepeatability(Repeatability repeatability) {
         this.repeatability = repeatability;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder=new StringBuilder();
+        stringBuilder.append("id: ").append(id).append("\n")
+                .append("название: ").append("\"").append(title).append("\"").append("\n")
+                .append("описание: ").append("\"").append(description).append("\"").append("\n")
+                .append("тип: ").append(type==Type.PERSONAL ? "личная" : "рабочая").append("\n")
+                .append("дата и время: ").append(dateTime.format(Constant.DATE_TIME_FORMATTER)).append("\n")
+                .append("повторяемость: ").append(repeatability).append("\n");
+        return stringBuilder.toString();
     }
 }
