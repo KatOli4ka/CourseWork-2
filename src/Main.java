@@ -1,18 +1,22 @@
 import constants.Constant;
+import exception.TaskNotFoundException;
 import exception.WrongTaskParameterException;
 import repeatability.*;
 import task.Task;
 import task.TaskService;
 import task.Type;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Collection;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 public class Main {
     private static final Pattern DATE_TIME_PETTERN=Pattern.compile("\\d{2}\\.\\d{2}\\.\\d{4} \\d{2}\\:\\d{2}");
+    private static final Pattern DATE_PETTERN=Pattern.compile("\\d{2}\\.\\d{2}\\.\\d{4}");
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         scanner.useDelimiter("\n");
@@ -24,13 +28,13 @@ public class Main {
                 int menu = scanner.nextInt();
                 switch (menu) {
                     case 1:
-                        inputTask(scanner);
+                        addTask(scanner);
                         break;
                         case 2:
-                            // todo: обрабатываем пункт меню 2
+                            deleteTask(scanner);
                             break;
                         case 3:
-                            // todo: обрабатываем пункт меню 3
+                            printTasksByDay(scanner);
                             break;
                         case 0:
                             break label;
@@ -43,7 +47,49 @@ public class Main {
 
     }
 
-    private static void inputTask(Scanner scanner) {
+    private static void printTasksByDay(Scanner scanner) {
+        do {
+            System.out.println("Введите дату в формате \"25.12.2022\": ");
+            if (scanner.hasNext(DATE_PETTERN)) {
+                   LocalDate day= checkDate(scanner.next(DATE_PETTERN));
+                if (day == null) {
+                    System.out.println("Некорректный формат даты!");
+                    continue;
+                }
+                Collection<Task> tasksByDay = TaskService.getTaskByDay(day);
+                if (tasksByDay.isEmpty()) {
+                    System.out.println("Задачи на " + day.format(Constant.DATE_FORMATTER) + " не найдены!");
+                } else {
+                    System.out.println("Задачи на "+day.format(Constant.DATE_FORMATTER)+": ");
+                    for (Task task : tasksByDay) {
+                        System.out.println(task);
+                    }
+                }
+                break;
+                } else {
+                    scanner.next();
+                }
+        } while (true);
+    }
+
+    private static void deleteTask(Scanner scanner) {
+        try {
+            do {
+                System.out.println("Введите id задачи: ");
+                if (scanner.hasNextInt()) {
+                    int id= scanner.nextInt();
+                    TaskService.deleteById(id);
+                    break;
+                } else {
+                    scanner.next();
+                }
+            } while (true);
+        } catch (TaskNotFoundException e) {
+            System.out.println(e.getMessage());;
+        }
+    }
+
+    private static void addTask(Scanner scanner) {
         try {
             System.out.print("Введите название задачи: ");
             String title = scanner.next();
@@ -54,6 +100,8 @@ public class Main {
             Repeatability repeatability = inputR(scanner);
             Task task=new Task(title,description,type,dateTime,repeatability);
             TaskService.add(task);
+            System.out.println("Задача добавлена!");
+            System.out.println(task);
         } catch (WrongTaskParameterException e) {
             System.out.println(e.getMessage());;
         }
@@ -63,7 +111,7 @@ public class Main {
     private static Type inputType(Scanner scanner) {
         Type type;
         do {
-            System.out.println("Введите тип задачи: 1. Личная\n2. Рабочая\nТип задачи: ");
+            System.out.println("Введите тип задачи:\n1. Личная\n2. Рабочая\nТип задачи: ");
             if (scanner.hasNextInt()) {
                 int number= scanner.nextInt();
                if (number!= 1 && number != 2) {
@@ -109,11 +157,18 @@ public class Main {
             return null;
         }
     }
+    private static LocalDate checkDate(String date) {
+        try {
+            return LocalDate.parse(date, Constant.DATE_FORMATTER);
+        } catch (DateTimeParseException e) {
+            return null;
+        }
+    }
     private static Repeatability inputR (Scanner scanner) {
         Repeatability repeatability;
         do {
-            System.out.println("Введите тип повторяемости задачи: 1. Однократная\n2. Ежедневная\n3. Еженедельная" +
-                    "\n4. Ежемесячная\n5. Ежегодгная: ");
+            System.out.println("Введите тип повторяемости задачи:\n1. Однократная\n2. Ежедневная\n3. Еженедельная" +
+                    "\n4. Ежемесячная\n5. Ежегодная: ");
             if (scanner.hasNextInt()) {
                 int number= scanner.nextInt();
                 if (number< 1 || number >5) {
