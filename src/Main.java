@@ -41,7 +41,7 @@ public class Main {
                 }
             } else {
                 scanner.next();
-                System.out.println("Выберите пункт меню из списка!");
+                System.out.println("Выберите пункт меню из списка:");
             }
         }
     }
